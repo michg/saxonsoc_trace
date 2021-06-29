@@ -12,7 +12,7 @@ import spinal.lib.generator._
 import spinal.lib.misc.plic.PlicMapping
 import vexriscv.VexRiscvBmbGenerator
 import vexriscv.ip.fpu.{FpuCore, FpuParameter, FpuPort}
-import vexriscv.plugin.{CsrPlugin, FpuPlugin}
+import vexriscv.plugin.{CsrPlugin, FpuPlugin, TracePlugin}
 
 class VexRiscvClusterGenerator(cpuCount : Int) extends Area {
   // Define the BMB interconnect utilities
@@ -38,6 +38,10 @@ class VexRiscvClusterGenerator(cpuCount : Int) extends Area {
     List(clint.logic, vex.logic).produce{
       for (plugin <- vex.config.plugins) plugin match {
         case plugin : CsrPlugin if plugin.utime != null => plugin.utime := RegNext(clint.logic.io.time)
+        case plugin : TracePlugin => {
+            Handle(plugin.uart.txd.toIo)
+            plugin.uart.rxd := True
+            }
         case _ =>
       }
     }
