@@ -24,7 +24,7 @@ The tracedata for core zero  can be captured at the output _zz_1
 with a uart receiver at a baudrate of 6MBaud.
 
 The captured data can be decoded with:
-`python3 dec.py uart0.log`
+`python3 dec.py uart0.trc`
 
 
 
