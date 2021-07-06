@@ -16,6 +16,7 @@ A sample project for [Altera DE2-115](https://www.terasic.com.tw/cgi-bin/page/ar
 The firmware therefor can be compiled with:  
 `python3 mkfw.py saxon hello`
 Then the verilog source can be build:
+`export SAXON_CPU_COUNT=4`
 `sbt "runMain saxon.board.smpbram.SmpBram"`
 Then the project quartus/saxon.qpf can be compiled with quartus.
 
