@@ -39,13 +39,16 @@ class VexRiscvClusterGenerator(cpuCount : Int) extends Area {
       for (plugin <- vex.config.plugins) plugin match {
         case plugin : CsrPlugin if plugin.utime != null => plugin.utime := RegNext(clint.logic.io.time)
         case plugin : TracePlugin => {
-             if(plugin.uart != null) plugin.uart.rxd := True
+             if(plugin.uart != null) plugin.uart.rxd := True        
              if(cpuId == 0) {
-               if(plugin.ftxd != null) Handle(plugin.ftxd.toIo)
-               if(plugin.uart != null)  {
-                 Handle(plugin.uart.txd.toIo)
+               if(plugin.mii != null)  {
+                 Handle(plugin.mii.TX.toIo.setName("trc_ethmii"))
+                 val prstn = out(True).setName("trc_ethmii_rstn")
                }
+               if(plugin.ftxd != null) Handle(plugin.ftxd.toIo.setName("trc_ft245"))
+               if(plugin.uart != null) Handle(plugin.uart.txd.toIo.setName("trc_uart_txd"))
              } else {
+               if(plugin.mii != null) plugin.mii.TX.CLK := False
                if(plugin.ftxd != null) plugin.ftxd.txe := False
             }
           }

@@ -1,14 +1,18 @@
-### Saxonsoc with a serial trace plugin
+### Saxonsoc with a trace plugin
 
 [Saxonsoc](https://github.com/SpinalHDL/SaxonSoc) extended with a trace plugin over
-a serial uart.  
+one of the following interfaces:
+
+- UART at a baudrate of 6.25MBaud
+- 8 bit parallel FT245 asynchronous mode
+- 100Mbit ethernet with MII-interface
+
 The plugin has the following properties:  
 
-- separate trace for each core
-- trace data contains cycle counter value and a fixed amount(REGCOUNT) of register values. Selected registers can be configured by changing the csr register MSAMPLESEL [0x7D1]
-by  
-- each value encoded with variable bytes length 
-- a trace output can be triggered by:
+- Separate trace for each core. The trace interface of one core is connected to the toplevel.
+- Trace data contains cycle counter value and a fixed amount(REGCOUNT) of register values. Selected registers can be configured by changing the csr register MSAMPLESEL [0x7D1].
+- Each value is encoded with a variable bytes length. 
+- A trace output can be triggered by:
   - a csr write access to MSAMPLE [0x7D0]
   - program counter matching the value of MSAMPLEADR [0x7D2]  
 
@@ -20,11 +24,10 @@ Then the verilog source can be build:
 `sbt "runMain saxon.board.smpbram.SmpBram"`  
 Then the project quartus/saxon.qpf can be compiled with quartus.
 
-The tracedata for core zero  can be captured at the output _zz_1
-with a uart receiver at a baudrate of 6MBaud.
-
 The captured data can be decoded with:
 `python3 dec.py uart0.trc`
+
+
 
 
 
