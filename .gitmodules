@@ -1,9 +1,9 @@
 [submodule "ext/SpinalHDL"]
 	path = ext/SpinalHDL
-	url = https://github.com/SpinalHDL/SpinalHDL.git
+	url = https://github.com/michg/spinalhdl.git
 [submodule "ext/VexRiscv"]
 	path = ext/VexRiscv
-	url = https://github.com/SpinalHDL/VexRiscv.git
+	url = https://github.com/michg/vexriscv.git
 [submodule "ext/sd_device"]
 	path = ext/sd_device
 	url = https://github.com/SpinalHDL/sd_device.git
