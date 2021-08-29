@@ -12,7 +12,8 @@ import spinal.lib.generator._
 import spinal.lib.misc.plic.PlicMapping
 import vexriscv.VexRiscvBmbGenerator
 import vexriscv.ip.fpu.{FpuCore, FpuParameter, FpuPort}
-import vexriscv.plugin.{CsrPlugin, FpuPlugin, TracePlugin}
+import vexriscv.plugin.{CsrPlugin, FpuPlugin, TracePlugin, Ftxd}
+import spinal.lib.com.eth._ 
 
 class VexRiscvClusterGenerator(cpuCount : Int) extends Area {
   // Define the BMB interconnect utilities
@@ -27,7 +28,26 @@ class VexRiscvClusterGenerator(cpuCount : Int) extends Area {
 
   val clint = BmbClintGenerator(0xB00000)
   clint.cpuCount.load(cpuCount)
-
+  
+  val ftxdsel = Handle(Ftxd()) 
+  Handle {
+  	ftxdsel.data := 0
+  	ftxdsel.xwr := True
+  }
+  val miitxsel = Handle(master(MiiTx(
+        MiiTxParameter(
+          dataWidth = 4,
+          withEr    = true
+        ))))
+   Handle{
+    miitxsel.EN := False
+    miitxsel.D := 0 
+    miitxsel.ER := False
+  }
+  val miitxsel_rstn = Handle(out(True)) 
+  val uarttxsel = Handle(out(Bool()))
+  Handle{uarttxsel := True}
+  var sel = Handle(Bits(4 bits))
   // Defines the VexRiscv cores with their connections to the PLIC and CLINT
   val cores = for(cpuId <- 0 until cpuCount) yield {
     val vex = VexRiscvBmbGenerator()
@@ -36,21 +56,22 @@ class VexRiscvClusterGenerator(cpuCount : Int) extends Area {
     plic.addTarget(vex.externalInterrupt)
     plic.addTarget(vex.externalSupervisorInterrupt)
     List(clint.logic, vex.logic).produce{
+    var coresel = Handle(Bits(4 bits))
       for (plugin <- vex.config.plugins) plugin match {
         case plugin : CsrPlugin if plugin.utime != null => plugin.utime := RegNext(clint.logic.io.time)
         case plugin : TracePlugin => {
-             if(plugin.uart != null) plugin.uart.rxd := True        
+             if(plugin.uart != null) plugin.uart.rxd := True
+             if(plugin.miitx != null) plugin.miitx.CLK := True
+             if(plugin.ftxd != null) plugin.ftxd.txe := True  
              if(cpuId == 0) {
-               if(plugin.mii != null)  {
-                 Handle(plugin.mii.TX.toIo.setName("trc_ethmii"))
-                 val prstn = out(True).setName("trc_ethmii_rstn")
-               }
-               if(plugin.ftxd != null) Handle(plugin.ftxd.toIo.setName("trc_ft245"))
-               if(plugin.uart != null) Handle(plugin.uart.txd.toIo.setName("trc_uart_txd"))
-             } else {
-               if(plugin.mii != null) plugin.mii.TX.CLK := False
-               if(plugin.ftxd != null) plugin.ftxd.txe := False
-            }
+               sel := plugin.csel 
+             }
+             when(sel === cpuId) {
+             	if(plugin.uart != null) uarttxsel:=plugin.uart.txd
+             	if(plugin.miitx != null) miitxsel<>plugin.miitx
+             	if(plugin.ftxd != null) ftxdsel<>plugin.ftxd
+             }
+             
           }
         case _ =>
       }

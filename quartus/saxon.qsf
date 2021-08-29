@@ -82,12 +82,23 @@ set_global_assignment -name EDA_SIMULATION_TOOL "Custom Verilog HDL"
 set_global_assignment -name EDA_TIME_SCALE "1 ps" -section_id eda_simulation
 set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "VERILOG HDL" -section_id eda_simulation
 set_global_assignment -name MUX_RESTRUCTURE OFF
+set_location_assignment PIN_B19 -to system_miitxsel_D[3]
+set_location_assignment PIN_A19 -to system_miitxsel_D[2]
+set_location_assignment PIN_D19 -to system_miitxsel_D[1]
+set_location_assignment PIN_C18 -to system_miitxsel_D[0]
+set_location_assignment PIN_A18 -to system_miitxsel_EN
+set_location_assignment PIN_B18 -to system_miitxsel_ER
+set_location_assignment PIN_B17 -to system_miitxsel_CLK
+set_location_assignment PIN_AH23 -to system_ftxdsel_txe
+set_location_assignment PIN_AG22 -to system_ftxdsel_data[0]
+set_location_assignment PIN_AE24 -to system_ftxdsel_data[1]
+set_location_assignment PIN_AH22 -to system_ftxdsel_data[2]
+set_location_assignment PIN_AF26 -to system_ftxdsel_data[3]
+set_location_assignment PIN_AE20 -to system_ftxdsel_data[4]
+set_location_assignment PIN_AG23 -to system_ftxdsel_data[5]
+set_location_assignment PIN_AF20 -to system_ftxdsel_data[6]
+set_location_assignment PIN_AH26 -to system_ftxdsel_data[7]
+set_location_assignment PIN_AG26 -to system_ftxdsel_xwr
+set_location_assignment PIN_AF16 -to system_uarttxsel
+set_location_assignment PIN_C19 -to system_miitxsel_rstn
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
-set_location_assignment PIN_B19 -to trc_ethmii_D[3]
-set_location_assignment PIN_A19 -to trc_ethmii_D[2]
-set_location_assignment PIN_D19 -to trc_ethmii_D[1]
-set_location_assignment PIN_C18 -to trc_ethmii_D[0]
-set_location_assignment PIN_A18 -to trc_ethmii_EN
-set_location_assignment PIN_B18 -to trc_ethmii_ER
-set_location_assignment PIN_C19 -to trc_ethmii_rstn
-set_location_assignment PIN_B17 -to trc_ethmii_CLK
