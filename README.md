@@ -3,13 +3,14 @@
 [Saxonsoc](https://github.com/SpinalHDL/SaxonSoc) extended with a trace plugin over
 one of the following interfaces:
 
-- UART at a baudrate of 6.25MBaud
+- UART at a baudrate of 6MBaud
 - 8 bit parallel FT245 asynchronous mode
 - 100Mbit ethernet with MII-interface
 
 The plugin has the following properties:  
 
 - Separate trace for each core. The trace interface of one core is connected to the toplevel.
+  The selection can be configured with the csr register MSAMPLECSEL [0x7D3]
 - Trace data contains cycle counter value and a fixed amount(REGCOUNT) of register values. Selected registers can be configured by changing the csr register MSAMPLESEL [0x7D1].
 - Each value is encoded with a variable bytes length. 
 - A trace output can be triggered by:
