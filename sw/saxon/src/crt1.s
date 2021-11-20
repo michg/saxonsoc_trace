@@ -8,7 +8,14 @@ bne x10, x0, slave
 li x2, 0x10a06000
 jal x1, getlock
 la x12, uart_write
-csrw msampleadr, x12
+csrw msampletabdat, x12
+li x12, 0x20001
+csrw msampletabcfg, x12
+nop
+la x12, main
+csrw msampletabdat, x12
+li x12, 0x10001
+csrw msampletabcfg, x12
 csrr x12, mhartid
 csrwi msample, 1
 jal x1, main

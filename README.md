@@ -15,7 +15,10 @@ The plugin has the following properties:
 - Each value is encoded with a variable bytes length. 
 - A trace output can be triggered by:
   - a csr write access to MSAMPLE [0x7D0]
-  - program counter matching the value of MSAMPLEADR [0x7D2]  
+  - program counter matching the values in an address table.
+    A new value can be added to the table as following: 
+    1. address to be matched has to be written in MSAMPLETABDAT [0x7D5]
+    2. write table index into MSAMPLETABCFG [0x7D4] [16:] and write enable in [0] 
 
 A sample project for [Altera DE2-115](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=139&No=502&PartNo=2) is included in the subdirectory quartus.  
 The firmware therefor can be compiled with:  
@@ -26,7 +29,7 @@ Then the verilog source can be build:
 Then the project quartus/saxon.qpf can be compiled with quartus.
 
 The captured data can be decoded with:
-`python3 dec.py uart0.trc`
+`python3 dec.py trace.trc`
 
 
 
