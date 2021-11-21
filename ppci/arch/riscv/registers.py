@@ -193,7 +193,7 @@ RiscvFRegister.registers = fregisters
 num2regmap = {r.num: r for r in registers}
 
 gdb_registers = registers + [PC]
-RiscvCsrRegister.registers = [MSTATUS, MIE, MTVEC, MEPC, MCAUSE, MHARTID, FRM, MSAMPLE, MSAMPLEADR, MSAMPLECSEL, MSAMPLETABCFG, MSAMPLETABDAT]
+RiscvCsrRegister.registers = [MSTATUS, MIE, MTVEC, MEPC, MCAUSE, MHARTID, FRM, MSAMPLE, MSAMPLECSEL, MSAMPLETABCFG, MSAMPLETABDAT]
 
 register_classes_hwfp = [
     RegisterClass(
